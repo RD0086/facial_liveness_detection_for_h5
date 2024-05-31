@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸活体检测</title>
+</head>
+<script type="text/javascript" th:inline="javascript">
+    const bizId = [[${bizId}]];
+    const livingType = [[${livingType}]];
+    var returnUrl = [[${returnUrl}]];
+    const livingPageStyle = [[${livingPageStyle}]];
+    const needVideo = [[${needVideo}]];
+    const takeImageNumber = [[${takeImageNumber}]];
+    const strategy = [[${strategy}]];
+
+    // 把域名拼接上
+    returnUrl = document.location.origin + returnUrl;
+    // 构造URL
+    const fldt_url = `https://edis.esandcloud.com/livingdetection/rpverifyh5/public/livingdetect/getLDTURL?needVideo=${needVideo}&takeImageNumber=${takeImageNumber}&strategy=${strategy}&bizId=${bizId}&livingType=${livingType}&returnUrl=${returnUrl}&livingPageStyle=${livingPageStyle}`
+    // 重定向到此链接中
+    window.location.replace(fldt_url);
+</script>
+
+<body>
+
+</body>
+</html>
