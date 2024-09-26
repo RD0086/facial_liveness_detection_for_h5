@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>刷脸认证</title>
+    <style>
+        #imageContainer {
+            text-align: center;
+        }
+        #imageDisplay {
+            max-width: 200px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div id="imageContainer">
+    <img id="imageDisplay">
+    <input type="file" accept="image/*" id="fileInput" style="display: none;">
+    <br><br>
+    <button onclick="document.getElementById('fileInput').click();">添加照片</button>
+    <button onclick="next()">开始刷脸认证</button>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    const bizId = [[${bizId}]];
+    const bizType = [[${bizType}]];
+    const livingType = [[${livingType}]];
+    var returnUrl = [[${returnUrl}]];
+    const livingPageStyle = [[${livingPageStyle}]];
+
+    var image64 = "";
+    /*window.onload = function() {
+        document.getElementById('imageDisplay').src = image64;
+    };*/
+    document.getElementById('fileInput').addEventListener('change', function() {
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imageDisplay').src = e.target.result;
+            image64 = e.target.result.split(',')[1];// 将base64数据存入全局变量中
+            var url = '/fldt/UserAdd';
+            const formData = new FormData();
+            formData.append('image64', image64);
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+        }
+        reader.readAsDataURL(file);
+
+    });
+
+    function next(){
+       // var Url = "/fldt/BrushFace_returnURL?token=" + token + "&verifyMsg=" + verifyMsg;
+      // window.location.replace(Url)
+        // 把域名拼接上
+        returnUrl ="get:" + document.location.origin + returnUrl;
+        // 构造URL
+        const fldt_url = `https://edis.esandcloud.com/livingdetection/rpverifyh5/public/livingdetect/getLDTURL?bizId=${bizId}&bizType=${bizType}&livingType=${livingType}&returnUrl=${returnUrl}&livingPageStyle=${livingPageStyle}`
+        // 重定向到此链接中
+        window.location.replace(fldt_url);
+
+    }
+
+
+</script>
+
+</html>
