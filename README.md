@@ -4,6 +4,7 @@ H5活体检测 (眨眼，摇头，点头，远近，炫彩)，前后端结合，
 ## 演示视频
 ![DEMO](imgs/demo.gif)
 
+- H5 体验DEMO链接 ： https://dev.esandcloud.com/h5demo/esand/living
 - 接入文档：https://esandinfo.yuque.com/yv6e1k/aa4qsg/gcv7xq
 
 ## 联系我
