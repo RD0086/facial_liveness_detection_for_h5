@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>活体检测</title>
+  <script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+
+  <!--    <script type="text/javascript" src="https://cucibala.mynatapp.cc/static/EsLivingDetection.js"></script>-->
+  <script src="https://public.esandcloud.com/libs/axios.min.js"></script>
+  <script src="https://public.esandcloud.com/libs/plupload.full.min.js"></script>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" th:href="@{/css/livingDetection-1.0.0.css}">
+<!--      <link rel="stylesheet" href="../../css/livingDetection-1.0.0.css">-->
+  <script th:inline="javascript" >
+    //js获取后端model传过来的对象
+    const token = [[${token}]]
+    const verifyMsg = [[${verifyMsg}]]
+    const code = [[${code}]]
+    const msg = [[${msg}]]
+  </script>
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+<div data-role="page">
+  <div class="result-container f-c-c">
+    <div class="result-msg-container msg f-c-c" status="show">
+      <div class="result-title f-c-c">
+        <div class="f-c-c result-title-msg-container">
+          <div class="result-title-msg" id="resTitleMsg"></div>
+        </div>
+        <img src="" width="100px" height="100px" style="margin-bottom: 20px;margin-top: 5px" class="result-img"/>
+      </div>
+      <div class="result-msg-content">
+        <div class="result-item f-c-c msg-container">
+          <div class="result-item-label l-h-3">msg:</div>
+          <div id="msg-text" class="result-text l-h-3"></div>
+        </div>
+        <div class="result-item f-c-c frontRes-container">
+          <div class="result-item-label l-h-3">verifyMsg:</div>
+          <div class="result-text frontRes-text l-h-3"></div>
+        </div>
+        <div class="result-item error-msg-content f-c-c">
+          <div class="result-item-label">设备信息:</div>
+          <div class="result-text userAgent-text"></div>
+        </div>
+        <div class="result-item f-c-c success-msg-content">
+          <div class="result-item-label l-h-3">appID:</div>
+          <div class="result-text appid l-h-3"></div>
+        </div>
+        <div class="result-item f-c-c success-msg-content">
+          <div class="result-item-label l-h-3">isCharge:</div>
+          <div class="result-text isCharge l-h-3"></div>
+        </div>
+        <div class="result-item f-c-c success-msg-content">
+          <div class="result-item-label l-h-3">logID:</div>
+          <div class="result-text logID l-h-3"></div>
+        </div>
+        <div class="result-item f-c-c success-msg-content">
+          <div class="result-item-label l-h-3">requestId:</div>
+          <div class="result-text requestId l-h-3"></div>
+        </div>
+        <div class="result-item f-c-c resCode-container">
+          <div class="result-item-label l-h-3">resultCode:</div>
+          <div class="result-text resultCode l-h-3"></div>
+        </div>
+        <div class="result-item f-c-c sdkErrLog-container">
+          <div class="result-item-label l-h-3">sdk日志:</div>
+          <div class="result-text sdkErrLog l-h-3"></div>
+        </div>
+      </div>
+    </div>
+    <div class="back-btn-container f-c-c">
+      <button class="back-btn btn" onclick="handleNavigateto()">返回</button>
+    </div>
+  </div>
+  <div class="authing-container f-c-c" style="display: flex">
+    <div class="loading-container" style="display: flex">
+      <div class="load">
+        <div class="bounce1 load-bounce"></div>
+        <div class="bounce2 load-bounce"></div>
+        <div class="bounce3 load-bounce"></div>
+      </div>
+      <span style="margin-bottom: 80px">loading</span>
+    </div>
+  </div>
+</div>
+
+</body>
+<script>
+  window.onpageshow = function (event) {
+    if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+      // if(!token || !verifyMsg){
+      //   window.location.href = window.location.origin + "/livingDetection/index";
+      // }
+    }
+  }
+  window.onload = function (){
+    console.log("token:",token," verifyMsg:",verifyMsg," msg:",msg," code:",code)
+    if(token && verifyMsg){
+      getLivingRes().then(res => {
+        console.log("结果",res)
+        let resultData = res.data;
+        let bestImgList = [];
+        bestImgList.push(resultData.bestImg)
+        let resObj = {
+          resCode: resultData.resultCode,
+          resMsg: resultData.msg,
+          resContent: JSON.stringify(resultData),
+          bestImgList: bestImgList,
+          resNotice: resultData.code == "0000" ? "success" : "error",
+          frontRes: ""
+        }
+        setRes(resObj);
+      });
+    }else{
+      let resObj = {
+        resCode: code,
+        resMsg: msg,
+        resNotice: "error",
+        frontRes: ""
+      }
+      setRes(resObj);
+    }
+  }
+
+  //获取认证结果
+  function getLivingRes(){
+    let formData = new FormData();
+    formData.append("token", token);
+    formData.append("verifyMsg", verifyMsg);
+    return axios({
+      method: 'post',
+      url: '/livingDetection/verify',
+      headers: {"Content-Type": "multipart/form-data"},
+      cache:false,
+      data: formData,
+    })
+  }
+
+  //显示结果
+  function setRes(res){
+    if(res.resNotice == "success"){
+      if(res.resCode == "LDT_LIVING_SUCCESS"){
+        document.querySelector(".result-img").setAttribute("src","/images/verify-success.png");
+        $("#resTitleMsg").text("活体检测成功");
+      }else{
+        document.querySelector(".result-img").setAttribute("src","/images/verify-fail.png");
+        let msg = res.resMsg ? res.resMsg : "活体检测失败"
+        $("#resTitleMsg").text(msg);
+      }
+      $(".success-msg-content").css("display","flex");
+      let resContent = JSON.parse(res.resContent);
+      $(".appid").text(resContent.appid);
+      $(".isCharge").text(resContent.charge);
+      $(".logID").text(resContent.logID);
+      $(".requestId").text(resContent.requestId);
+      $(".resultCode").text(resContent.resultCode);
+      $("msg-container").css("display","none");
+      $(".resCode-container").css("display", "flex");
+    }else{
+      document.querySelector(".result-img").setAttribute("src","/images/fail-icon.png");
+      $(".error-msg-content").css("display","flex");
+      $(".userAgent-text").text(res.userAgent);
+      $(".msg-container").css("display","flex");
+      $("#msg-text").text(res.resMsg);
+      if(res.resTitle){
+        $("#resTitleMsg").text(res.resTitle);
+      }else{
+        $("#resTitleMsg").text("活体检测失败");
+      }
+      if(res.resCode){
+        $(".resCode-container").css("display", "flex");
+        $(".resultCode").text(res.resCode);
+      }
+    }
+    let sdkErrLog = localStorage.getItem("sdkErrLog");
+    if(sdkErrLog){
+      $(".sdkErrLog-container").css("display", "flex");
+      $(".sdkErrLog").text(sdkErrLog);
+    }
+    if(res.frontRes){
+      $(".frontRes-container").css("display", "flex");
+      $(".frontRes-text").text(res.frontRes);
+    }
+    $(".authing-container").css("display", "none");
+    $(".result-container").css("display", "flex");
+  }
+
+  //返回
+  function handleNavigateto(){
+      $(".authing-container").css("display", "flex");
+      sessionStorage.removeItem('res');
+      window.location.href = window.location.origin + "/livingDetection/index";
+  };
+</script>
+</html>

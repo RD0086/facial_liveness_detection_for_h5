@@ -1,0 +1,692 @@
+.head > span {
+    font-size: 20px;
+    color: white;
+    padding-left: 10px;
+}
+.tip > img {
+    margin: 0 auto;
+}
+#app {}
+body {
+    font-size: 16px;
+}
+.btn {
+    /*padding: 0 30px;*/
+}
+.btn > button {
+    font-size: 16px;
+    background-color: #ee882e !important;
+    color: white !important;
+}
+.form > div, .btn > div {
+    width: 100%;
+}
+.form input {
+    width: calc(100% - 12px);
+    height: 30px;
+    line-height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+.auth_btn {
+    width: 80%;
+    height: 40px;
+    /*margin-bottom: 10px;*/
+    background-color: #40AFFE;
+    border-radius: 20px;
+    color: white;
+    border: 0px;
+    font-size: 16px;
+}
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.f-c-c{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/*认证主页*/
+.auth-index-container{
+    flex-direction: column;
+    width: 90%;
+    height: 90vh;
+    padding: 0 5vw;
+    background: #fff;
+    z-index: 9;
+    padding-top: 60px;
+    justify-content: flex-start;
+}
+.auth-index-style1-container{
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    display: flex
+}
+.auth-image-container{
+    width: 100%;
+    height: 40%;
+}
+.auth-prompt-container{
+    width: 100%;
+    height: 20%;
+    flex-direction: column;
+}
+.auth-btn-container{
+    width: 100%;
+    height: 20%;
+}
+.auth-image-content{
+    height: 80%;
+    width: auto;
+    aspect-ratio: 1;
+}
+.auth-image{
+    width: 100%;
+    height: 100%;
+}
+/*认证主页：提示*/
+.auth-prompt-text{
+    width: 100%;
+    height: 30%;
+    color: #9F9F9F;
+    font-size: 14px;
+}
+.auth-prompt-icon-container{
+    width: 80%;
+    height: 55%;
+    justify-content: space-around;
+}
+.auth-prompt-icon-item{
+    width: 25%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.auth-prompt-icon-img{
+    width: 7.5vh;
+    height: 7.5vh;
+    aspect-ratio: 1;
+}
+.auth-prompt-icon-text{
+    width: 100%;
+    height: 25%;
+    text-align: center;
+    font-size: 12px;
+    color: #cccccc;
+}
+.auth-prompt-icon{
+    width: auto;
+    height: 100%;
+}
+.auth-index-style2-container{
+    justify-content: center;
+    margin-top: -40px;
+}
+.auth-index-style2-container .auth-image-container{
+    width: 100%;
+    height: 55%;
+}
+.auth-index-style2-container .auth-prompt-container{
+    width: 100%;
+    height: 25%;
+    align-items: flex-start;
+    flex-direction: row;
+}
+.auth-index-style2-container .auth-btn-container{
+    width: 100%;
+    height: 10%;
+}
+.auth-style2-image{
+    width: 37vh;
+    height: 37vh;
+}
+.auth-style2-prompt-item{
+    width: 25%;
+    height: 60%;
+    flex-direction: column;
+    font-size: 14px;
+    color: rgba(0,0,0,0.90);
+    font-weight: 400;
+}
+.auth-style2-prompt-item img{
+    width: 13vw;
+    height: 13vw;
+    margin-bottom: 12px;
+}
+
+/*设置*/
+.auth-setting-box{
+    width: 100%;
+    position: absolute;
+    bottom: 5vh;
+}
+.auth-setting-btn{
+    background: none;
+    border: none;
+    color: #67C23A;
+    opacity: .8;
+    font-size: 16px;
+    -webkit-tap-highlight-color:transparent;
+}
+.auth-setting-btn:active{
+    opacity: 1;
+    color: #113400;
+}
+.singleColorKeepTime-select-container,.takePhotoNumber-select-container,.preCamera-select-container,.themeType-select-container,.livingPolicyType-select-container{
+    width: 90vw;
+    height: 96vh;
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #f8f8f8;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2vh 5vw;
+    z-index: 999;
+    display: none;
+}
+.auth-setting-container{
+    display: none;
+    z-index: -1;
+    position: relative;
+    min-height: 96vh;
+    width: 90vw;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #f8f8f8;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2vh 5vw;
+}
+.auth-setting-item-container{
+    width: 100%;
+}
+.auth-setting-label{
+    width: calc(100% - 15px);
+    height: 35px;
+    font-size: 14px;
+    color: #bebebe;
+    line-height: 35px;
+    padding-left: 15px;
+}
+.auth-setting-content,.singleColorKeepTime-select-content,.takePhotoNumber-select-content,.preCamera-select-content,.themeType-select-content,.livingPolicyType-select-content{
+    width: 100%;
+    background: #fff;
+    border-radius: 15px;
+    flex-direction: column;
+    overflow: hidden;
+}
+.auth-setting-item{
+    width: 90%;
+    height: 42px;
+    justify-content: space-between;
+}
+.auth-setting-item-content,.takePhotoNumber-select-item,.singleColorKeepTime-select-item,.preCamera-select-item,.themeType-select-item,.livingPolicyType-select-item{
+    width: 100%;
+    height: 42px;
+    justify-content: space-between;
+    padding: 0;
+}
+.auth-setting-item-btn,.takePhotoNumber-select-item-btn,.singleColorKeepTime-select-item-btn,.preCamera-select-item-btn,.themeType-select-item-btn,.livingPolicyType-select-item-btn{
+    width: 90%;
+    height: 100%;
+    margin: 0 5%;
+    justify-content: space-between;
+    background: none;
+    border: 0;
+    -webkit-tap-highlight-color:transparent;
+}
+.auth-setting-item-content:active{
+    background: #eee;
+}
+.borderTop{
+    border-top: 1px solid #eeeeee;
+    box-sizing: border-box;
+}
+.borderBottom{
+    border-bottom: 1px solid #eeeeee;
+    box-sizing: border-box;
+}
+.auth-setting-item-switch{
+    width: 50px;
+    height: 28px;
+}
+.auth-setting-item-label,.singleColorKeepTime-select-item-value,.takePhotoNumber-select-item-value,.preCamera-select-item-value,.themeType-select-item-value,.livingPolicyType-select-item-value{
+    color: #333;
+    font-size: 16px;
+}
+/*设置：开关*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+.switch {
+    /* 禁用文本选中效果 */
+    user-select: none;
+
+    /* 设置点击时的高亮颜色为透明 */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.switch input {display:none;}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+input:checked + .slider {
+    background-color: #40AFFE;
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px #40AFFE;
+}
+input:checked + .slider:before {
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
+}
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+/*设置：活体检测间隔时间与照片数量*/
+.auth-setting-item-input{
+    width: 100px;
+    height: 20px;
+    border: none;
+    background: none;
+    font-size: 15px;
+    text-align: right;
+    outline: none;
+}
+.auth-setting-item-right-icon{
+    width: 18px;
+    height: 18px;
+}
+.singleColorKeepTime-select-item,.takePhotoNumber-select-item,.preCamera-select-item,.themeType-select-item,.livingPolicyType-select-item{
+    justify-content: space-between;
+}
+.singleColorKeepTime-select-item-icon,.takePhotoNumber-select-item-icon,.preCamera-select-item-icon,.themeType-select-item-icon,.livingPolicyType-select-item-icon{
+    display: none;
+}
+.singleColorKeepTime-select-label,.takePhotoNumber-select-label,.auth-setting-complete-container,.preCamera-select-label,.themeType-select-label,.livingPolicyType-select-label{
+    width: 92%;
+    height: 40px;
+    font-size: 14px;
+    color: #bebebe;
+    line-height: 40px;
+    padding-left: 4%;
+    justify-content: space-between;
+}
+.singleColorKeepTime-select-btn,.takePhotoNumber-select-btn,.preCamera-select-btn,.themeType-select-btn,.livingPolicyType-select-btn{
+    width: 70vw;
+    height: 40px;
+    background-color: #40AFFE;
+    border-radius: 20px;
+    color: white;
+    border: 0px;
+    line-height: 40px;
+    font-size: 20px;
+    -webkit-tap-highlight-color:transparent;
+    position: absolute;
+    bottom: 6vh;
+}
+.auth-setting-complete-btn{
+    width: 70vw;
+    height: 40px;
+    background-color: #40AFFE;
+    border-radius: 20px;
+    color: white;
+    border: 0px;
+    line-height: 40px;
+    font-size: 20px;
+    -webkit-tap-highlight-color:transparent;
+    margin: 20px 0 10px 0;
+}
+.singleColorKeepTime-select-btn,.takePhotoNumber-select-btn,.preCamera-select-btn,.themeType-select-btn,.livingPolicyType-select-btn{
+    left: 50%;
+    margin-left: -35vw;
+}
+.singleColorKeepTime-select-btn:active,.takePhotoNumber-select-btn:active,.auth-setting-complete-btn:active,.preCamera-select-btn:active,.themeType-select-btn:active,.livingPolicyType-select-btn:active{
+    opacity: 1;
+}
+.contact-customer-service-container{
+    width: 90vw;
+    height: 92vh;
+    padding: 4vh 5vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #fff;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.themeType-select-item-circle{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+/*加载*/
+.authing-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    background: #fff;
+    flex-direction: column;
+    display: none;
+}
+.show {
+    display: none
+}
+.load {
+    width: 150px;
+    text-align: center;
+}
+.load-bounce {
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+    animation: bouncedelay 1.4s infinite ease-in-out;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.load .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+.load .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+@-webkit-keyframes bouncedelay {
+    0%, 80%, 100% {
+        -webkit-transform: scale(0.0)
+    }
+    40% {
+        -webkit-transform: scale(1.0);
+    }
+}
+@keyframes bouncedelay {
+    0%, 80%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+    40% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+/*结果*/
+.result-container{
+    width: 90vw;
+    min-height: 92vh;
+    padding: 4vh 5vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    z-index: 99;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.result-msg-container{
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.result-title{
+    width: 100%;
+    height: 200px;
+    flex-direction: column;
+    /*justify-content: flex-start;*/
+}
+.back-btn-container{
+    width: 100%;
+    height: 15vh;
+    flex-direction: column;
+}
+.back-btn{
+    width: 80%;
+    height: 40px;
+    background-color: #40AFFE;
+    border-radius: 20px;
+    color: white;
+    border: 0px;
+    line-height: 40px;
+    font-size: 20px;
+}
+.result-msg-content{
+    width: 100%;
+    min-height: 42vh;
+    padding: 10px 0;
+    /*flex-direction: column;*/
+    /*justify-content: flex-start;*/
+}
+.result-text{
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    width: 74%;
+    text-align: right;
+    font-size: 14px;
+    color: #333333;
+}
+.result-item{
+    width: 100%;
+    min-height: 30px;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid #cccccc;
+}
+.result-item-label{
+    width: 25%;
+    text-align: left;
+    font-size: 14px;
+    color: #888888;
+}
+.result-faceImg-container{
+    width: 100%;
+    min-height: 10vh;
+    padding: 2.5vh 0;
+}
+.loading-container{
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+.result-title-msg-container{
+    width: 100%;
+    height: 70px;
+    font-size: 20px;
+    text-align: center;
+}
+.result-title-msg{
+
+}
+.app-container{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: none;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.contact-bg-container{
+    width: 100%;
+    height: 20vh;
+    position: relative;
+}
+.contact-bg-text{
+    font-size: 40px;
+    color: #40AFFE;
+}
+.contact-icon{
+    position: absolute;
+    top: 5vh;
+    left: 5vw;
+}
+.contact-content{
+    width: 100%;
+    height: 50%;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.contact-item{
+    width: 70%;
+    height: 8vh;
+}
+.contact-item-img{
+    width: 35%;
+    height: 100%;
+}
+.contact-item-text{
+    width: 65%;
+    height: 100%;
+    justify-content: flex-start;
+}
+.contact-icon1{
+    transform: rotate(60deg);
+    left: 80%;
+    top: 40%;
+}
+.contact-icon2{
+    transform: rotate(330deg);
+    left: 18%;
+    top: 22%;
+}
+.wechat-image-container{
+    width: 70%;
+    height: 20vh;
+}
+.contact-btn-text{
+    font-size: 14px;
+    border-bottom: 1px solid #ff1515;
+    color: #ff1515;
+}
+.result-faceImg{
+    width: 90vw;
+}
+.qrcode-container{
+    width: 90vw;
+    height: 92vh;
+    padding: 4vh 5vw;
+    display: none;
+    background: rgba(0, 0, 0, .5);
+    z-index: 99;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.qrcode-content{
+    width: 30vw;
+    height: 60vh;
+    background: #fff;
+    flex-direction: column;
+    box-shadow: 0 0 10px #555;
+    border-radius: 3px;
+    min-width: 300px;
+    min-height: 400px;
+}
+.userAgent-text{
+    font-size: 12px;
+}
+.l-h-3{
+    line-height: 30px;
+}
+.error-msg-content,.success-msg-content,.frontRes-container,.msg-container,.resCode-container,.sdkErrLog-container{
+    display: none;
+}
+.change-camera-btn{
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+}
+.change-camera-icon{
+    width: 30px;
+    height: 30px;
+}
+.change-camera-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: #888888;
+    position: absolute;
+    display: none;
+    top: 30px;
+    right: 15px;
+    visibility: hidden;
+}
+.change-camera-text{
+    background: #ffffff;
+    color: #888888;
+}
+.animation-container{
+    width: 100%;
+    height: 40%;
+    position: relative;
+    opacity: 0;
+}
+.animation-icon{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 35vw;
+    height: auto;
+    margin-left: -17.5vw;
+    visibility: hidden;
+}

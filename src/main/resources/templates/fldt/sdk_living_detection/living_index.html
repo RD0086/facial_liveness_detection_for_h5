@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>活体检测</title>
+    <script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<!--    TODO: 升级sdk时需要更换-->
+    <link rel="stylesheet" type="text/css" href="https://public.esandcloud.com/efaceid/2.3.8/EsLivingDetection.2.3.8.css">
+    <script type="text/javascript" src="https://public.esandcloud.com/efaceid/2.3.8/EsLivingDetection.min.2.3.8.js"></script>
+
+<!--    <script type="text/javascript" src="https://cucibala.mynatapp.cc/static/EsLivingDetection.js"></script>-->
+    <script src="https://public.esandcloud.com/libs/axios.min.js"></script>
+    <script src="https://public.esandcloud.com/libs/plupload.full.min.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" th:href="@{/css/livingDetection-1.0.0.css}">
+<!--    <link rel="stylesheet" href="../../css/livingDetection-1.0.0.css">-->
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div data-role="page">
+    <div id="container" style="display: none;">
+        <a id="selectfiles"  href="javascript:void(0);" class='btn'>选择文件</a>
+        <a id="postfiles" href="javascript:void(0);"  class='btn'>开始上传</a>
+    </div>
+    <div class="auth-index-container f-c-c">
+        <div class="auth-index-style1-container f-c-c">
+            <div class="auth-image-container f-c-c">
+                <div class="auth-image-content">
+                    <img th:src="@{/images/auth-icon.png}" class="auth-image">
+                </div>
+            </div>
+            <div class="auth-prompt-container f-c-c">
+                <div class="auth-prompt-text f-c-c">
+                    <span>请根据屏幕指示完成识别</span>
+                </div>
+                <div class="auth-prompt-icon-container f-c-c">
+                    <div class="auth-prompt-icon-item f-c-c">
+                        <div class="auth-prompt-icon-img f-c-c">
+                            <img th:src="@{/images/zdpm-icon-1.png}" class="auth-prompt-icon">
+                        </div>
+                        <div class="auth-prompt-icon-text">正对屏幕</div>
+                    </div>
+                    <div class="auth-prompt-icon-item f-c-c">
+                        <div class="auth-prompt-icon-img">
+                            <img th:src="@{/images/gxcz-icon-1.png}" class="auth-prompt-icon">
+                        </div>
+                        <div class="auth-prompt-icon-text">光线充足</div>
+                    </div>
+                    <div class="auth-prompt-icon-item f-c-c">
+                        <div class="auth-prompt-icon-img">
+                            <img th:src="@{/images/lwzd-icon-1.png}" class="auth-prompt-icon">
+                        </div>
+                        <div class="auth-prompt-icon-text">脸无遮挡</div>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-btn-container f-c-c">
+                <button id="auth_btn" class="auth_btn btn" onclick="handleStartLiving()">活体检测开始</button>
+            </div>
+        </div>
+    </div>
+    <div class="authing-container f-c-c">
+        <!--加载-->
+        <div class="loading-container">
+            <div class="load">
+                <div class="bounce1 load-bounce"></div>
+                <div class="bounce2 load-bounce"></div>
+                <div class="bounce3 load-bounce"></div>
+            </div>
+            <span style="margin-bottom: 80px">loading</span>
+        </div>
+        <!--认证-->
+        <div class="app-container">
+            <div id="app"></div>
+            <!--摄像头切换-->
+            <div class="change-camera-container">
+                <button class="change-camera-btn" onclick="handleChangeCameraType()">
+                    <img th:src="@{/images/change.png}" class="change-camera-icon">
+                </button>
+                <div class="change-camera-text">翻转</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    let cameraDeviceID
+    window.onload = async function (){
+
+    }
+    function hideUI(){
+        $(".needHide").css("display","none");
+    }
+
+    function showUI(){
+        $(".needHide").css("display","inherit");
+        $(".app-container").css("display", "none");
+        $(".loading-container").css("display", "flex");
+    }
+
+    function transmitResult(token, verifyMsg, code, msg){
+        window.location.href = window.location.origin + "/livingDetection/result" + "?token=" + token + "&verifyMsg=" + verifyMsg + "&code=" + code + "&msg=" + msg;
+    }
+    function handleStartLiving(){
+        $(".loading-container").css("display", "flex");
+        let preCamera = localStorage.getItem('preCamera');
+        if(preCamera){
+            cameraDeviceID = preCamera;
+        }else{
+            cameraDeviceID = 0
+        }
+        living()
+    }
+    async function living() {
+        // $("#msg-text").text("");
+        localStorage.setItem("sdkErrLog", ""); //清除sdk日志
+        //验证初始化，返回参数inimsg透传给服务器
+        let livingType = 6;
+        $(".authing-container").css("display", "flex")
+        let takePhotoNumber = "1";
+        let isUseStrictMode = false;
+        let needVideo =  "false";
+        let frontRes = ""
+        console.log("摄像头", cameraDeviceID)
+        var config={
+            takeImageNumber: takePhotoNumber,
+            strict:isUseStrictMode,
+            deviceId: cameraDeviceID,
+            needVideo: needVideo
+        }
+        console.info("config", config)
+        let token = "";
+        // TODO: 升级sdk版本时 需要更改
+        let url = "https://public.esandcloud.com/efaceid/2.3.8/worker.min.2.3.8.js";
+        EsLivingDetection.verifyInit(url,livingType,config).then(result => {
+            hideUI();
+            console.log(result)
+            var formData = new FormData();
+            formData.append("initMsg", result.data);
+            //请求服务器获取token
+            return axios({
+                method: 'post',
+                url: '/livingDetection/init',
+                headers: {"Content-Type": "multipart/form-data"},
+                cache:false,
+                data: formData,
+            })
+            //服务器初始化成功
+        }).then(result => {
+            /*返回参数说明
+            *  resultData{
+            *   "code": "LDT_SUCCESS",
+            *   "msg": "成功",
+            *   "requestId": "head20200826192615111kr1vH",
+            *   "token": "xxxxxxxxxxxxxxxxxxxx"
+            *}
+            *@code:
+            *  LDT_SUCCESS           成功
+            *  LDT_INVALID_PARAM     参数错误（解密失败）
+            *  LDT_DEVICE_HIGHT_RISK 设备判定为高风险
+            *  LDT_EXCEPTION         业务异常
+            */
+            let resultData = result.data;
+            console.log(result.data)
+            if(resultData.token){
+                token = resultData.token;
+            }
+            //开始活人认证
+            if (resultData.code === "0000") {
+                $(".loading-container").css("display", "none");
+                $(".app-container").css("display", "flex");
+                return EsLivingDetection.startLivingDetect(resultData.token, "app", undefined, (res)=>{
+                    $(".change-camera-container").css("display", "flex");
+                });
+            }else {
+                throw resultData;
+            }
+            //前端活体检测成功返回参数token和verifyMsg
+        }).then(result => {
+            //跳转结果页面
+            transmitResult(result.data.token, result.data.verifyMsg);
+        }).catch(ex => {
+            let code = "LDT_EXCEPTION";
+            let msg = "";
+            //如果存在code代表是插件抛出的异常
+            if (ex.code) {
+                console.log(ex.msg);
+                code = ex.code;
+                msg = ex.msg;
+            }
+            //网络异常或者，服务器返回错误参数
+            else {
+                resTitle = "网络发生异常";
+                if(ex.message){
+                    msg = ex.message;
+                }else{
+                    msg = JSON.parse(ex);
+                }
+            }
+            showUI();
+            let log = EsLivingDetection.getLog();
+            if(log){
+                console.info("sdk日志", log);
+                localStorage.setItem("sdkErrLog", log);
+            }
+            transmitResult("", "", code, msg);
+        });
+    };
+
+    //切换前后置摄像头
+    function handleChangeCameraType(){
+        //退出重新修改摄像头类型重新开始认证
+        EsLivingDetection.exit();
+        if(cameraDeviceID == 0){
+            cameraDeviceID = 1
+        }else{
+            cameraDeviceID = 0
+        }
+        living()
+    }
+
+</script>
+</html>
